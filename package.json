@@ -7,8 +7,8 @@
   },
   "scripts": {
     "dist": "tsup src",
-    "start:dev": "tsx src/server.ts",
-    "start:watch": "tsx watch src/server.ts",
+    "start:dev": "tsx --env-file=.env src/server.ts",
+    "start:watch": "tsx watch --env-file=.env src/server.ts",
     "start:dist": "npm run dist && node dist/src/index.js"
   },
   "keywords": [],
@@ -16,8 +16,12 @@
   "license": "ISC",
   "description": "Aplicação de agendamento de livros da biblioteca Mini Centro White.",
   "devDependencies": {
+    "@types/express": "^5.0.2",
     "tsup": "^8.5.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
   }
 }
