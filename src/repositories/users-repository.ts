@@ -1,15 +1,15 @@
 import { UserModel } from "../models/user-model";
 
 const database: UserModel[] = [
-  { id: 1, name: "Delcio" },
-  { id: 2, name: "Liliane" },
+  { id: 1, name: "Delcio", telephone: 71987654321 },
+  { id: 2, name: "Liliane", telephone: 71987654321 },
 ];
 
-export const getUsersList = async (): Promise<UserModel[]> => {
+export const getUsersFindAll = async (): Promise<UserModel[]> => {
   return database;
 };
 
-export const getUserById = async (
+export const getUserFindById = async (
   id: number
 ): Promise<UserModel | undefined> => {
   return database.find((user) => user.id === id);
