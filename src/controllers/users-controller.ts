@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import { getUserService } from "../services/users-service";
+import { ok } from "../utils/http-helper";
 
 export const getUser = async (request: Request, response: Response) => {
   const data = await getUserService();
-  response.status(200).json(data);
+  const res = await ok(data)
+
+  response.status(res.statusCode).json(res.body);
 };
