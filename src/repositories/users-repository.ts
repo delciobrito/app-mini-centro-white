@@ -1,7 +1,4 @@
-interface UserModel {
-  id: number;
-  name: string;
-}
+import { UserModel } from "../models/user-model";
 
 const database: UserModel[] = [
   { id: 1, name: "Delcio" },
