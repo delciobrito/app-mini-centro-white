@@ -7,5 +7,6 @@ const router = Router()
 router.get("/users", UsersController.getUser)
 router.get("/users/:id", UsersController.getUserById)
 router.post("/users", UsersController.postUser)
+router.patch("/users/:id", UsersController.updateUser)
 
 export default router

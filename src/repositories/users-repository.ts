@@ -1,8 +1,8 @@
 import { UserModel } from "../models/user-model";
 
 const database: UserModel[] = [
-  { id: 1, name: "Delcio", phone: 71987654321 },
-  { id: 2, name: "Liliane", phone: 71987654321 },
+  { id: 1, name: "Delcio", phone: "71987654321" },
+  { id: 2, name: "Liliane", phone: "71987654321" },
 ];
 
 export const getUsersFindAll = async (): Promise<UserModel[]> => {
@@ -17,4 +17,15 @@ export const getUserFindById = async (
 
 export const insertUser = async (user: UserModel) => {
   database.push(user);
+};
+
+export const updateUser = async (id: number, user: UserModel) => {
+  const indexUser = database.findIndex((user) => user.id === id);
+
+  if(indexUser !== -1) {
+    database[indexUser].name = user.name
+    database[indexUser].phone = user.phone
+  }
+
+  return database[indexUser]
 };

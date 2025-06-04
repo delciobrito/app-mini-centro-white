@@ -7,13 +7,20 @@ export const getUser = async (req: Request, res: Response) => {
 };
 
 export const getUserById = async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id)
-  const httpResponse = await Service.getUserByIdService(id)
-  res.status(httpResponse.statusCode).json(httpResponse.body)
-}
+  const id = parseInt(req.params.id);
+  const httpResponse = await Service.getUserByIdService(id);
+  res.status(httpResponse.statusCode).json(httpResponse.body);
+};
 
 export const postUser = async (req: Request, res: Response) => {
-  const body = req.body
-  const httpResponse = await Service.postUserService(body)
+  const body = req.body;
+  const httpResponse = await Service.postUserService(body);
+  res.status(httpResponse.statusCode).json(httpResponse.body);
+};
+
+export const updateUser = async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const body = req.body;
+  const httpResponse = await Service.updateUserService(id, body);
   res.status(httpResponse.statusCode).json(httpResponse.body)
-}
+};
