@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as Service from "../services/users-service";
+import { any } from "zod";
 
 export const getUser = async (req: Request, res: Response) => {
   const httpResponse = await Service.getUserService();
@@ -24,3 +25,9 @@ export const updateUser = async (req: Request, res: Response) => {
   const httpResponse = await Service.updateUserService(id, body);
   res.status(httpResponse.statusCode).json(httpResponse.body)
 };
+
+export const deleteUser = async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id)
+  const httpResponse = await Service.deleteUserService(id)
+  res.status(httpResponse.statusCode).json(httpResponse.body)
+}
