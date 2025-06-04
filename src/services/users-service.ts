@@ -94,7 +94,17 @@ export const updateUserService = async (id: number, user: UserModel) => {
 
 export const deleteUserService = async (id: number) => {
   let response = null;
-  let found = await UsersRepository.deleteUser(id);
+  let found = false;
+  
+  const paramsSchema = z.number();
+
+  const result = paramsSchema.safeParse(id);
+
+  if (!result.success) {
+    return await HttpResponse.badRequest();
+  } else {
+    found = await UsersRepository.deleteUser(id);
+  }
 
   if (found) {
     response = await HttpResponse.ok({ message: "success" });
