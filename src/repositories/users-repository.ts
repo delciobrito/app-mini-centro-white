@@ -16,7 +16,7 @@ export const getFindUserById = async (
 };
 
 export const insertUser = async (user: UserModel) => {
-  database.push(user);
+  database.push(user)
 };
 
 export const updateUser = async (id: number, user: UserModel) => {

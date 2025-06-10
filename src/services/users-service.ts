@@ -56,6 +56,7 @@ export const postUserService = async (user: UserModel) => {
       return response;
     }
   }
+
   response = HttpResponse.created();
 
   return response;
@@ -95,7 +96,7 @@ export const updateUserService = async (id: number, user: UserModel) => {
 export const deleteUserService = async (id: number) => {
   let response = null;
   let found = false;
-  
+
   const paramsSchema = z.number();
 
   const result = paramsSchema.safeParse(id);
