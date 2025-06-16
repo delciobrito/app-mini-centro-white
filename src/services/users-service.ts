@@ -5,6 +5,7 @@ import { z, ZodError } from "zod";
 
 export const getUserService = async () => {
   const data = await UsersRepository.getFindAllUsers();
+  // console.log(data)
   let response = null;
 
   if (data) {
@@ -16,14 +17,37 @@ export const getUserService = async () => {
   return response;
 };
 
-export const getUserByIdService = async (id: number) => {
-  const data = await UsersRepository.getFindUserById(id);
-  let response = null;
+export const getUserByIdService = async (id: any) => {
+  let response = await HttpResponse.noContent();
+  let data = null;
+  const validationSchema = z.coerce.number().int();
 
-  if (data) {
-    response = await HttpResponse.ok(data);
-  } else {
-    response = await HttpResponse.noContent();
+  try {
+    validationSchema.parse(id);
+    data = await UsersRepository.getFindUserById(id);
+
+    return (response = await HttpResponse.ok(data));
+  } catch (err) {
+    if (err instanceof ZodError) {
+      response = await HttpResponse.badRequest().then();
+      response.body = {
+        message: "Validation error!",
+        errors: err.errors.map((e) => ({
+          campo: e.path.join(),
+          mensagem: e.message,
+        })),
+      };
+
+      return response;
+    }
+    if (err) {
+      response = await HttpResponse.internalServerError().then();
+      response.body = {
+        error: err instanceof Error ? err.message : String(err),
+      };
+
+      return response;
+    }
   }
 
   return response;

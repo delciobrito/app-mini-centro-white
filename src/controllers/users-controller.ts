@@ -8,7 +8,7 @@ export const getUser = async (req: Request, res: Response) => {
 };
 
 export const getUserById = async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
   const httpResponse = await Service.getUserByIdService(id);
   res.status(httpResponse.statusCode).json(httpResponse.body);
 };

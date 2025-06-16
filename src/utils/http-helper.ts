@@ -27,3 +27,10 @@ export const created = async (): Promise<HttpResponse> => {
     body: { message: "Success." },
   };
 };
+
+export const internalServerError = async (): Promise<HttpResponse> => {
+  return {
+    statusCode: 500,
+    body: null,
+  };
+};
