@@ -6,10 +6,11 @@
     "doc": "docs"
   },
   "scripts": {
+    "start": "npm run start:dist",
     "dist": "tsup src --out-dir dist && cp .env dist/",
     "start:dev": "tsx --env-file=.env src/server.ts",
     "start:watch": "tsx watch --env-file=.env src/server.ts",
-    "start:dist": "npm run dist && node --env-file=.env dist/server.js"
+    "start:dist": "npm run dist && node dist/server.js"
   },
   "keywords": [],
   "author": "Delcio Brito",
