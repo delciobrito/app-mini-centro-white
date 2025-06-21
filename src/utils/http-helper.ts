@@ -24,13 +24,20 @@ export const badRequest = async (): Promise<HttpResponse> => {
 export const created = async (): Promise<HttpResponse> => {
   return {
     statusCode: 201,
-    body: { message: "Success." },
+    body: null
   };
 };
 
 export const internalServerError = async (): Promise<HttpResponse> => {
   return {
     statusCode: 500,
+    body: null,
+  };
+};
+
+export const notFound = async (): Promise<HttpResponse> => {
+  return {
+    statusCode: 404,
     body: null,
   };
 };

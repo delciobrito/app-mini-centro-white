@@ -5,7 +5,6 @@ import { z, ZodError } from "zod";
 
 export const getUserService = async () => {
   const data = await UsersRepository.getFindAllUsers();
-  // console.log(data)
   let response = null;
 
   if (data) {
@@ -54,10 +53,10 @@ export const getUserByIdService = async (id: any) => {
 };
 
 export const postUserService = async (user: UserModel) => {
-  let response = null;
-
+  let response = await HttpResponse.badRequest();
+  let data = null;
   const validationsSchema = z.object({
-    id: z.number(),
+    id: z.coerce.number().int(),
     name: z.string({ required_error: "Name is required!" }),
     phone: z
       .string({ required_error: "Phone is required!" })
@@ -66,7 +65,11 @@ export const postUserService = async (user: UserModel) => {
 
   try {
     validationsSchema.parse(user);
-    await UsersRepository.insertUser(user);
+    data = await UsersRepository.insertUser(user);
+    response = await HttpResponse.created().then();
+    response.body = {
+      message: data,
+    };
   } catch (err) {
     if (err instanceof ZodError) {
       response = await HttpResponse.badRequest().then();
@@ -81,14 +84,14 @@ export const postUserService = async (user: UserModel) => {
     }
   }
 
-  response = HttpResponse.created();
-
   return response;
 };
 
-export const updateUserService = async (id: number, user: UserModel) => {
+export const updateUserService = async (id: any, user: UserModel) => {
   let data = null;
-  let response = null;
+  let response = await HttpResponse.notFound();
+
+  const idValidationsSchema = z.coerce.number().int();
   const validationSchema = z.object({
     name: z.string(),
     phone: z
@@ -97,8 +100,11 @@ export const updateUserService = async (id: number, user: UserModel) => {
   });
 
   try {
+    idValidationsSchema.parse(id);
     validationSchema.parse(user);
     data = await UsersRepository.updateUser(id, user);
+
+    response = await HttpResponse.ok({ message: data });
   } catch (err) {
     if (err instanceof ZodError) {
       response = await HttpResponse.badRequest().then();
@@ -109,32 +115,48 @@ export const updateUserService = async (id: number, user: UserModel) => {
           mensagem: e.message,
         })),
       };
+
+      return response;
+    }
+
+    if (err) {
+      response = await HttpResponse.notFound().then();
+      response.body = {
+        error: err instanceof Error ? err.message : String(err),
+      };
     }
   }
-
-  response = await HttpResponse.ok(data);
 
   return response;
 };
 
-export const deleteUserService = async (id: number) => {
-  let response = null;
-  let found = false;
+export const deleteUserService = async (id: any) => {
+  let response = await HttpResponse.notFound();
+  let data = null;
+  const paramsSchema = z.coerce.number().int();
 
-  const paramsSchema = z.number();
+  try {
+    paramsSchema.parse(id);
+    data = await UsersRepository.deleteUser(id);
+    response = await HttpResponse.ok({ message: data });
+  } catch (err) {
+    if (err instanceof ZodError) {
+      response = await HttpResponse.badRequest().then();
+      response.body = {
+        message: "Validation error!",
+        errors: err.errors.map((e) => ({
+          mensagem: e.message,
+        })),
+      };
+      return response;
+    }
 
-  const result = paramsSchema.safeParse(id);
-
-  if (!result.success) {
-    return await HttpResponse.badRequest();
-  } else {
-    found = await UsersRepository.deleteUser(id);
-  }
-
-  if (found) {
-    response = await HttpResponse.ok({ message: "success" });
-  } else {
-    response = await HttpResponse.noContent();
+    if(err) {
+      response = await HttpResponse.notFound().then()
+      response.body = {
+        error: err instanceof Error ? err.message : String(err)
+      }
+    }
   }
 
   return response;
